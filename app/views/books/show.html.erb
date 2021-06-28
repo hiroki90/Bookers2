@@ -34,9 +34,37 @@
       						<% end %>
       						</td>
   						<% end %>
+							<td>
+								  <%= "コメント数: #{@s_book.book_comments.count}" %>
+
+							</td>
 					</tr>
 
+					<% @s_book.book_comments.each do |book_comment| %>
+					<tr>
+							<td>
+									<a href="<%= user_path(book_comment.user)%>">
+										<%= attachment_image_tag book_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', fallback: "no_image.jpg", size:'40x40'%><br>
+										<%= book_comment.user.name %>
+									</a>
+							</td>
+							<td>
+								<%= book_comment.comment %>
+							</td>
+							<td>
+								<% if book_comment.user == current_user %>
+									<td>
+										<%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-info", data: { confirm: 'Are you sure?' } %>
+									</td>
+								<% end %>
+							</td>
+					</tr>
+					<% end %>
 			</table>
+						 <%= form_with(model:[@s_book, @book_comment], local:true)do |f| %>
+						 	 <%= f.text_area :comment, value: nil %><br>
+						 	 <%= f.submit '送信', :class=>"btn" %><br>
+						 <% end %>
 		</div>
 	</div>
 </div>
